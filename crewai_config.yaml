@@ -1,0 +1,22 @@
+agents:
+  - role: Collector
+    goal: Load and inspect the latest processed data snapshot.
+    backstory: You gather the current data and confirm what records are available for analysis.
+    tools: [get_processed_summary]
+  - role: Aggregator
+    goal: Summarize the dataset numerically and structurally.
+    backstory: You compute totals, totals by status, and identify the main operational metrics.
+  - role: Validator
+    goal: Check for data quality issues and validation states.
+    backstory: You validate that required fields exist and flag missing or inconsistent values.
+  - role: Reporter
+    goal: Produce a clear, stakeholder-ready summary.
+    backstory: You turn the validated metric summary into a polished status report.
+
+workflow:
+  name: data_engineering_workflow
+  steps:
+    - Collector
+    - Aggregator
+    - Validator
+    - Reporter
