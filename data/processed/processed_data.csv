@@ -1,0 +1,4 @@
+order_id,customer,amount,status
+1,Alice,120.5,active
+2,Bob,210.0,pending
+3,Charlie,95.25,active
