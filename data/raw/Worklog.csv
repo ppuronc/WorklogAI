@@ -1,0 +1,11 @@
+﻿enterprise_id,employee_id,employee_name,work_date,project,hours,charge_code
+Alice.Johnson,E001,Alice Johnson,2026-10-05,Project Alpha,8,DEV001
+Alice.Johnson,E001,Alice Johnson,2026-10-06,Project Alpha,7.5,DEV001
+Bob.Smith,E002,Bob Smith,2026-10-05,Project Beta,8,CONS001
+Bob.Smith,E002,Bob Smith,2026-10-06,Project Beta,6,DEV001
+Carol.Davis,E003,Carol Davis,2026-10-05,Project Alpha,8,ADMIN001
+Carol.Davis,E003,Carol Davis,2026-10-06,Project Alpha,7,INVALID99
+David.Wilson,E004,David Wilson,2026-10-05,Project Gamma,8,DEV002
+David.Wilson,E004,David Wilson,2026-10-06,Project Gamma,-2,DEV001
+Emma.Brown,E005,Emma Brown,2026-10-05,Project Beta,8,CONS001
+Emma.Brown,E005,Emma Brown,2026-10-06,Project Beta,abc,DEV001

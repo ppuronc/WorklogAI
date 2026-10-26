@@ -1,0 +1,6 @@
+﻿charge_code,is_valid,description
+DEV001,true,Software Development
+DEV002,true,Data Engineering
+CONS001,true,Consulting Services
+ADMIN001,true,Administrative Activities
+TRN001,true,Training
