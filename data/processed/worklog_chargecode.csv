@@ -1,0 +1,11 @@
+enterprise_id,employee_id,employee_name,work_date,project,hours,charge_code,hours_numeric,is_valid,description,valid_charge_code,valid_hours,valid_work_date,record_valid,validation_message
+Alice.Johnson,E001,Alice Johnson,2026-10-05,Project Alpha,8,DEV001,8.0,True,Software Development,True,True,True,True,Valid record
+Alice.Johnson,E001,Alice Johnson,2026-10-06,Project Alpha,7.5,DEV001,7.5,True,Software Development,True,True,True,True,Valid record
+Bob.Smith,E002,Bob Smith,2026-10-05,Project Beta,8,CONS001,8.0,True,Consulting Services,True,True,True,True,Valid record
+Bob.Smith,E002,Bob Smith,2026-10-06,Project Beta,6,DEV001,6.0,True,Software Development,True,True,True,True,Valid record
+Carol.Davis,E003,Carol Davis,2026-10-05,Project Alpha,8,ADMIN001,8.0,True,Administrative Activities,True,True,True,True,Valid record
+Carol.Davis,E003,Carol Davis,2026-10-06,Project Alpha,7,INVALID99,7.0,,,False,True,True,False,Invalid charge code
+David.Wilson,E004,David Wilson,2026-10-05,Project Gamma,8,DEV002,8.0,True,Data Engineering,True,True,True,True,Valid record
+David.Wilson,E004,David Wilson,2026-10-06,Project Gamma,-2,DEV001,-2.0,True,Software Development,True,False,True,False,Invalid hours
+Emma.Brown,E005,Emma Brown,2026-10-05,Project Beta,8,CONS001,8.0,True,Consulting Services,True,True,True,True,Valid record
+Emma.Brown,E005,Emma Brown,2026-10-06,Project Beta,abc,DEV001,,True,Software Development,True,False,True,False,Invalid hours

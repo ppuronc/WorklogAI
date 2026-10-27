@@ -1,0 +1,15 @@
+# Sensitive local data containing token registry
+# WorklogAI sensitive/tokenization data
+data/secure/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Local virtual environments
+.venv/
+venv/
+
+# Local environment/secrets
+.env
+*.env
