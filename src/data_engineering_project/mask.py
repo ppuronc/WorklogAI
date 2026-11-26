@@ -20,12 +20,12 @@ REGISTRY_PATH = (
 
 REGISTRY_COLUMNS = [
     "enterprise_id",
-    "employee_id",
-    "employee_name",
+    #"employee_id",
+    #"employee_name",
     "token_number",
     "enterprise_token",
-    "employee_token",
-    "person_token",
+    #"employee_token",
+    #"person_token",
 ]
 
 
@@ -43,11 +43,11 @@ def load_registry() -> pd.DataFrame:
         REGISTRY_PATH,
         dtype={
             "enterprise_id": "string",
-            "employee_id": "string",
-            "employee_name": "string",
+            #"employee_id": "string",
+            #"employee_name": "string",
             "token_number": "Int64",
             "enterprise_token": "string",
-            "employee_token": "string",
+            #"employee_token": "string",
             "person_token": "string",
         },
     )
@@ -86,8 +86,8 @@ def normalize_identity_columns(
 
     required_columns = [
         "enterprise_id",
-        "employee_id",
-        "employee_name",
+        #"employee_id",
+        #"employee_name",
     ]
 
     missing_columns = [
@@ -136,8 +136,8 @@ def update_registry(
         df[
             [
                 "enterprise_id",
-                "employee_id",
-                "employee_name",
+               # "employee_id",
+               # "employee_name",
             ]
         ]
         .drop_duplicates()
@@ -148,16 +148,17 @@ def update_registry(
         employees
         .groupby("enterprise_id")
         .agg(
-            employee_id_count=("employee_id", "nunique"),
-            employee_name_count=("employee_name", "nunique"),
+            enterprise_id_count=("enterprise_id", "nunique"),                                                 
+           # employee_id_count=("employee_id", "nunique"),
+           # employee_name_count=("employee_name", "nunique"),
         )
         .reset_index()
     )
 
     conflicting_ids = conflicts.loc[
-        (conflicts["employee_id_count"] > 1)
-        | (conflicts["employee_name_count"] > 1),
-        "enterprise_id",
+        (conflicts["enterprise_id_count"] > 1),
+                                                 
+        "enterprise_id"
     ].tolist()
 
     if conflicting_ids:
@@ -210,8 +211,8 @@ def update_registry(
         new_rows.append(
             {
                 "enterprise_id": enterprise_id,
-                "employee_id": str(employee["employee_id"]),
-                "employee_name": str(employee["employee_name"]),
+            #    "employee_id": str(employee["employee_id"]),
+            #    "employee_name": str(employee["employee_name"]),
                 "token_number": token_number,
                 "enterprise_token": (
                     f"ENT_{token_number:06d}"
@@ -256,8 +257,8 @@ def mask_dataframe(
         [
             "enterprise_id",
             "enterprise_token",
-            "employee_token",
-            "person_token",
+           # "employee_token",
+           # "person_token",
         ]
     ].copy()
 
@@ -287,14 +288,14 @@ def mask_dataframe(
         )
 
     masked["enterprise_id"] = masked["enterprise_token"]
-    masked["employee_id"] = masked["employee_token"]
-    masked["employee_name"] = masked["person_token"]
+   # masked["employee_id"] = masked["employee_token"]
+   # masked["employee_name"] = masked["person_token"]
 
     masked = masked.drop(
         columns=[
             "enterprise_token",
-            "employee_token",
-            "person_token",
+         #   "employee_token",
+         #  "person_token",
         ]
     )
 
@@ -318,13 +319,13 @@ def unmask_text(
             row["enterprise_id"]
         )
 
-        replacements[str(row["employee_token"])] = str(
-            row["employee_id"]
-        )
+        #replacements[str(row["employee_token"])] = str(
+       #     row["employee_id"]
+       # )
 
-        replacements[str(row["person_token"])] = str(
-            row["employee_name"]
-        )
+        #replacements[str(row["person_token"])] = str(
+        #    row["employee_name"]
+        #)
 
     # Replace longer values first to reduce partial matches.
     for token in sorted(

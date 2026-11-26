@@ -59,16 +59,16 @@ def generate_employee_summary(
     # Calculate metrics using Pandas
     # -----------------------------------------------------
 
-    total_hours = df_emp["hours_numeric"].sum()
+    total_hours = df_emp["hours"].sum()
 
     valid_hours = df_emp.loc[
         df_emp["record_valid"],
-        "hours_numeric",
+        "hours",
     ].sum()
 
     invalid_hours = df_emp.loc[
         ~df_emp["record_valid"],
-        "hours_numeric",
+        "hours",
     ].sum()
 
     valid_records = int(
@@ -89,7 +89,7 @@ def generate_employee_summary(
         .groupby(
             ["charge_code", "valid_charge_code"],
             dropna=False,
-        )["hours_numeric"]
+        )["hours"]
         .sum()
         .reset_index()
     )
@@ -106,7 +106,7 @@ def generate_employee_summary(
 
         breakdown_lines.append(
             f"- {row['charge_code']}: "
-            f"{row['hours_numeric']} hours "
+            f"{row['hours']} hours "
             f"({status})"
         )
 
@@ -132,8 +132,8 @@ def generate_employee_summary(
         for _, row in invalid_df.iterrows():
 
             issue_lines.append(
-                f"- Date: {row['work_date']}, "
-                f"Project: {row['project']}, "
+                f"- Date: {row['date']}, "
+                #f"Project: {row['project']}, "
                 f"Charge Code: {row['charge_code']}, "
                 f"Hours: {row['hours']}, "
                 f"Issue: {row['validation_message']}"
@@ -147,8 +147,7 @@ def generate_employee_summary(
     # -----------------------------------------------------
 
     prompt = f"""
-Prepare a concise management-ready worklog report.
-
+Prepare a concise management-ready worklog report.                                                  
 Employee:
 {employee}
 
@@ -176,7 +175,8 @@ Reporting instructions:
 7. Do not invent missing information.
 8. Do not recalculate the supplied metrics.
 9. Keep the report concise and professional.
-"""
+"""                                           
+
 
     return call_ollama(prompt)
 
@@ -193,7 +193,7 @@ def summarize_with_agents(
     summaries = {}
 
     for employee, df_emp in df.groupby(
-        "employee_name"
+        "enterprise_id"
     ):
 
         summaries[employee] = (

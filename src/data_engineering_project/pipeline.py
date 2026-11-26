@@ -12,7 +12,7 @@ import pandas as pd
 BASE_DIR = Path(__file__).resolve().parents[2]
 
 WORKLOG_CSV_PATH = BASE_DIR / "data" / "raw" / "Worklog.csv"
-CHARGECODES_CSV_PATH = BASE_DIR / "data" / "raw" / "ChargeCodes.csv"
+CHARGECODES_CSV_PATH = BASE_DIR / "data" / "raw" / "StandardsChargeCodes.csv"
 
 PROCESSED_CSV_PATH = (
     BASE_DIR / "data" / "processed" / "worklog_chargecode.csv"
@@ -70,22 +70,25 @@ def transform_data(
     # Clean Worklog fields
     # -----------------------------------------------------
 
-    worklog["employee_id"] = (
-        worklog["employee_id"]
+
+    worklog["enterprise_id"] = (
+        worklog["enterprise_id"]
         .astype(str)
         .str.strip()
     )
 
-    worklog["employee_name"] = (
-        worklog["employee_name"]
-        .astype(str)
-        .str.strip()
+    # Convert period
+    worklog["period"] = pd.to_datetime(
+        worklog["period"],
+        errors="coerce"
+                    
     )
 
-    worklog["project"] = (
-        worklog["project"]
-        .astype(str)
-        .str.strip()
+    # Convert date
+    worklog["date"] = pd.to_datetime(
+        worklog["date"],
+        errors="coerce"
+                    
     )
 
     worklog["charge_code"] = (
@@ -95,44 +98,118 @@ def transform_data(
         .str.upper()
     )
 
-    # Convert work date
-    worklog["work_date"] = pd.to_datetime(
-        worklog["work_date"],
-        errors="coerce"
+                       
+    worklog["charge_code_description"] = (
+        worklog["charge_code_description"]
+        .astype(str)
+        .str.strip()
+        .str.upper()
+    )
+
+    worklog["chargeability_status"] = (
+        worklog["chargeability_status"]
+        .astype(str)
+        .str.strip()
+        .str.upper()
     )
 
     # Convert hours to numeric.
     # Example: "abc" becomes NaN.
-    worklog["hours_numeric"] = pd.to_numeric(
+    worklog["hours"] = pd.to_numeric(
         worklog["hours"],
         errors="coerce"
     )
 
+    worklog["tr_status"] = (
+        worklog["tr_status"]
+        .astype(str)
+        .str.strip()
+        .str.upper()
+    )
+
+    worklog["bal3"] = (
+        worklog["bal3"]
+        .astype(str)
+        .str.strip()
+        .str.upper()
+    )     
+
     # -----------------------------------------------------
     # Clean ChargeCodes data
     # -----------------------------------------------------
-
+#charge_code	charge_code_description	chargeability_status	isvalid	isstandard
     chargecodes["charge_code"] = (
         chargecodes["charge_code"]
         .astype(str)
         .str.strip()
         .str.upper()
     )
+    chargecodes["charge_code_description"] =(
+        chargecodes["charge_code_description"]
+        .astype(str)
+        .str.strip()
+        .str.upper()
+    )
 
-    chargecodes["is_valid"] = (
-        chargecodes["is_valid"]
+    chargecodes["chargeability_status"] = (
+        chargecodes["chargeability_status"]
+        .astype(str)
+        .str.strip()
+        .str.upper()
+    )
+
+    chargecodes["isvalid"] = (
+        chargecodes["isvalid"]
         .astype(str)
         .str.strip()
         .str.lower()
         .eq("true")
     )
 
+    chargecodes["isstandard"] = (
+        chargecodes["isstandard"]
+        .astype(str)
+        .str.strip()
+        .str.lower()
+        .eq("true")
+    )
+
+    worklog_chargecodes = worklog[
+        [
+        "charge_code",
+        "charge_code_description",
+        "chargeability_status",
+        ]
+    ].copy()
+   
+    # Add Additional columns to worklog_chargecodes
+    worklog_chargecodes["isvalid"] = True
+    worklog_chargecodes["isstandard"] = True
+
+    # Concatenate worklog_chargecodes with chargecodes DataFrame
+    worklog_chargecodes = pd.concat(
+            [worklog_chargecodes, chargecodes],
+            ignore_index=True
+        )
+    # create final wbs catalog
+    worklog_chargecodes = (
+            worklog_chargecodes
+            .groupby([
+                "charge_code",
+                "charge_code_description",
+                "chargeability_status",
+                "isvalid",
+                "isstandard"
+            ])
+            .size()
+            .reset_index(name="Count")
+        )   
     # -----------------------------------------------------
     # Merge Worklog with ChargeCodes
     # -----------------------------------------------------
 
     merged = worklog.merge(
-        chargecodes,
+        worklog_chargecodes,
         on="charge_code",
         how="left",
     )
@@ -143,18 +220,18 @@ def transform_data(
 
     # Charge code must exist and be marked valid
     merged["valid_charge_code"] = (
-        merged["is_valid"].fillna(False)
+        merged["isvalid"].fillna(False)
     )
 
     # Hours must be numeric and non-negative
     merged["valid_hours"] = (
-        merged["hours_numeric"].notna()
-        & (merged["hours_numeric"] >= 0)
+        merged["hours"].notna()
+        & (merged["hours"] >= 0)
     )
 
     # Date must successfully convert to a date
     merged["valid_work_date"] = (
-        merged["work_date"].notna()
+        merged["date"].notna()
     )
 
     # Overall record validity
