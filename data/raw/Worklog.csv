@@ -1,11 +1,11 @@
-﻿enterprise_id,employee_id,employee_name,work_date,project,hours,charge_code
-Alice.Johnson,E001,Alice Johnson,2026-10-05,Project Alpha,8,DEV001
-Alice.Johnson,E001,Alice Johnson,2026-10-06,Project Alpha,7.5,DEV001
-Bob.Smith,E002,Bob Smith,2026-10-05,Project Beta,8,CONS001
-Bob.Smith,E002,Bob Smith,2026-10-06,Project Beta,6,DEV001
-Carol.Davis,E003,Carol Davis,2026-10-05,Project Alpha,8,ADMIN001
-Carol.Davis,E003,Carol Davis,2026-10-06,Project Alpha,7,INVALID99
-David.Wilson,E004,David Wilson,2026-10-05,Project Gamma,8,DEV002
-David.Wilson,E004,David Wilson,2026-10-06,Project Gamma,-2,DEV001
-Emma.Brown,E005,Emma Brown,2026-10-05,Project Beta,8,CONS001
-Emma.Brown,E005,Emma Brown,2026-10-06,Project Beta,abc,DEV001
+Enterprise_Id,Period,Date,Charge_Code,Charge_Code_Description,Chargeability_Status,Hours,TR_Status,BAL3
+Alice.Johnson,10/15/2026,5/10/2026,DEV001,Software Development,Chargeable,8,Processed,
+Alice.Johnson,10/15/2026,6/10/2026,DEV001,Software Development,Chargeable,7.5,Processed,
+Bob.Smith,10/15/2026,5/10/2026,CONS001,Consulting Services,Chargeable,8,Processed,
+Bob.Smith,10/15/2026,6/10/2026,DEV001,Software Development,Chargeable,6,Processed,
+Carol.Davis,10/15/2026,5/10/2026,ADMIN001,Administrative Activities,,8,Processed,CENTRAL TRAINING - PARTICIPANT
+Carol.Davis,10/15/2026,6/10/2026,PTO001,INVALID99,,7,Processed,PTO/VACATIONS
+David.Wilson,10/15/2026,5/10/2026,DEV002,Data Engineering,Chargeable,8,Processed,
+David.Wilson,10/15/2026,6/10/2026,DEV002,Software Development,Chargeable,2,Processed,
+Emma.Brown,10/15/2026,5/10/2026,CONS001,Consulting Services,Chargeable,8,Processed,
+Emma.Brown,10/15/2026,6/10/2026,TRN001,Training,,0,Processed,CENTRAL TRAINING - PARTICIPANT
